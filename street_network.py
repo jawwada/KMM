@@ -7,7 +7,6 @@ Created on Mon Dec  7 14:29:42 2015
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
-import fiona as fi
 import pandas as pd
 from shapely.geometry import point,LineString
 
@@ -15,19 +14,18 @@ from shapely.geometry import point,LineString
 class GPSPoints:
     gps = pd.DataFrame
     
-    def __init__(self,in_file="/Users/ahmed/Documents/gps_data.txt"):
+    def __init__(self,in_file="/sandbox/KMM/gps_data.txt"):
         self.read_gps_file(in_file)
         
     def read_gps_file(self,in_file):
         self.gps = pd.read_csv(in_file, sep='\t')
 
 
-class RoadNetwork:
-    
+class RoadNetwork:    
         
     streets = pd.DataFrame
     
-    def __init__(self,in_file="/Users/ahmed/Documents/road_network.txt"):
+    def __init__(self,in_file="/sandbox/KMM//road_network.txt"):
         self.read_streets_file(in_file)
         
     
