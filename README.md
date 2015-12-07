@@ -1,2 +1,0 @@
-# KMM
-KernelizedMapMatching
