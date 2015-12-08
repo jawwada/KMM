@@ -40,7 +40,8 @@ print zip(streets.columns, [type(x) for x in streets.ix[0,:]])
 #order by speed limit
 
 #group by speed limit
-
+print streets.groupby(['Two Way']).count()
+streets=pd.DataFrame(streets)
 #time series
 
 #list comprehesnions
