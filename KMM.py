@@ -21,17 +21,12 @@ gps_p     = sn.GPSPoints()
 
 network.parse_streets()
 
-#utils = sn.MMUtils(gps_p,network)
+utils = sn.MMUtils(gps_p,network)
 #utils.find_closest_routes(100)
 
 streets = network.streets
 gps     = gps_p.gps
 
-
-try: 
-    pd.read_csv( "/sandbox/KMM/gps_data.txt2")
-except:
-    print "I/O error is here"
     
 '''
     Tesing Code
@@ -55,7 +50,9 @@ print zip(streets.columns, [type(x) for x in streets.ix[0,:]])
 
 #print streets['LINESTRING'][1].replace('\'','')
 line=LineString(streets['LINESTRING'][1])
+print line
 
+'''
 plt.figure()
 streets['points'].map(lambda x: plt.plot(x[1::2],x[0::2]))
 plt.plot(gps.ix[:,2:4],'+')
@@ -66,6 +63,7 @@ print gps.ix[:,2:4]
 print streets['LINESTRING'].head()
 
 
+'''
 '''
     Tesing Code Finished    
     '''

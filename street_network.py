@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Dec  7 14:29:42 2015
-
 @author: ahmed
 """
+
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
@@ -27,7 +27,7 @@ class GPSPoints:
         
         self.gps.pop('Unnamed: 4')
         self.gps.pop('Unnamed: 5')
-        
+        self.gps = self.gps.rename(columns=lambda x: x.replace(',', 't'))
 
 
 
@@ -35,7 +35,7 @@ class RoadNetwork:
         
     streets = pd.DataFrame
    
-    def __init__(self,in_file="/sandbox/KMM//road_network.txt"):
+    def __init__(self,in_file="/sandbox/KMM/road_network.txt"):
         
         self.read_streets_file(in_file)
         
@@ -105,6 +105,5 @@ class MMUtils:
                 if i==100 :
                     break;
             
-'''            
-        
+'''     
     
