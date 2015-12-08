@@ -12,7 +12,10 @@ import scipy as sp
 import matplotlib.pyplot as plt
 import pandas as pd
 import street_network as sn
-from shapely.geometry import LineString,Point
+from   shapely.geometry import LineString , Point
+import pyproj as proj
+from __future__ import division
+
 
 #reading the files and parsing the linestring
 
@@ -42,6 +45,9 @@ print zip(streets.columns, [type(x) for x in streets.ix[0,:]])
 #group by speed limit
 print streets.groupby(['Two Way']).count()
 streets=pd.DataFrame(streets)
+list(streets)
+streets.boxplot(column=" Speed (m/s)", by="Two Way")
+streets=streets.sort([" Speed (m/s)",'Two Way'])
 #time series
 
 #list comprehesnions
@@ -52,7 +58,7 @@ streets=pd.DataFrame(streets)
 #print streets['LINESTRING'][1].replace('\'','')
 line=LineString(streets['LINESTRING'][1])
 print line
-
+line.distance(Point(gps.ix[1,2:4]))
 '''
 plt.figure()
 streets['points'].map(lambda x: plt.plot(x[1::2],x[0::2]))
