@@ -1,5 +1,4 @@
-,,,0,,,0
-,0,,0
+
 # -*- coding: utf-8 -*-
 """
 Created on Mon Dec  7 10:49:25 2015
@@ -22,21 +21,39 @@ gps_p     = sn.GPSPoints()
 
 network.parse_streets()
 
-utils = sn.MMUtils(gps_p,network)
+#utils = sn.MMUtils(gps_p,network)
 #utils.find_closest_routes(100)
 
 streets = network.streets
 gps     = gps_p.gps
 
 
-
+try: 
+    pd.read_csv( "/sandbox/KMM/gps_data.txt2")
+except:
+    print "I/O error is here"
+    
 '''
     Tesing Code
 '''
+#columnwise sum
+# get the data types for all columns
+print zip(gps.columns, [type(x) for x in gps.ix[0,:]])
+print zip(streets.columns, [type(x) for x in streets.ix[0,:]])
+#indexing in pandas
+
+#order by speed limit
+
+#group by speed limit
+
+#time series
+
+#list comprehesnions
+
+#implementing map, flatmap, filter, fold and reduce in python
 
 
-print streets['LINESTRING'][1].replace('\'','')
-
+#print streets['LINESTRING'][1].replace('\'','')
 line=LineString(streets['LINESTRING'][1])
 
 plt.figure()
@@ -51,3 +68,4 @@ print streets['LINESTRING'].head()
 
 '''
     Tesing Code Finished    
+    '''
