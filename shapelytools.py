@@ -209,7 +209,7 @@ def closest_object(geometries, point):
         geom = geometries[min_index].
     """    
     min_dist, min_index = min((point.distance(geom), k) 
-                              for (k, geom) in enumerate(geometries))
+                              for k, geom in geometries.iteritems())
     
     return geometries[min_index], min_dist, min_index
     

@@ -17,13 +17,14 @@ import street_network as sn
 from   shapely.geometry import LineString , Point
 import geopandas as gp
 import itertools
-
+import shapelytools as st
+import pyproj
 #reading the files and parsing the linestring
+gps_points=100
+dist_thresh=100
 
 nw   = sn.RoadNetwork()
 gps_p     = sn.GPSPoints()
-
-
 
 utils = sn.MMUtils(gps_p,nw)
 #utils.find_closest_routes(100)
@@ -32,17 +33,39 @@ streets = nw.streets
 gps     = gps_p.gps
 
 
-closest=[k for k in nw.network_dict for y in gps_p.points_list \
-            if y.distance(nw.network_dict[k]) < 1000]
+closest=[k for k in nw.network_dict for y in gps_p.points_list[1:gps_points] \
+        if y.distance(nw.network_dict[k]) < dist_thresh]
 
 cl=streets[streets["Edge ID"].isin(closest)]
-plt.figure()
 
+small_nw = {key: nw.network_dict[key] for key in cl["Edge ID"]}
+
+closest_nw = dict()
+
+for i in range(len(gps_p.points_list[1:gps_points])):
+    closest_nw[i] = tuple(reversed(min((gps_p.points_list[i].distance(geom), k) \
+                    for k, geom in small_nw.iteritems())))
+
+point_edge_dict={k:v[0] for k,v in closest_nw.iteritems()}
+
+print point_edge_dict
+
+nearest_points = [st.project_point_to_object(gps_p.points_list[p],small_nw[e])
+                 for p,e in point_edge_dict.iteritems()]
+
+long_proj = [x.coords.xy[0][0] for x in nearest_points]
+lat_proj  = [x.coords.xy[1][0] for x in nearest_points]
+proj = pyproj.Proj("+proj=utm +zone=10T, +north +ellps=WGS84 +datum=WGS84 +units=m")
+xx, yy = proj(long_proj, lat_proj, inverse=True)
+
+plt.figure()
+#project_point_to_object(point, geometry)
+#closest_object(geometries, point):
 for index, i in cl.iterrows():
     plt.plot(i['Long'],i['Lat'])
+
+plt.plot(xx,yy,'ro')
 plt.show()
-
-
 '''
     Tesing Code
     

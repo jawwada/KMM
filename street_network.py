@@ -11,6 +11,7 @@ import pandas as pd
 from shapely.geometry import Point,LineString
 import pyproj
 
+
 class GPSPoints:
     
     gps = pd.DataFrame
@@ -93,8 +94,6 @@ class RoadNetwork:
         streets['points']       = streets['LINESTRING()']. \
                                         map(lambda x: str(x).split(' '))
                                         
-        
-        
         #one can take all lats and longs by flatmapping a list
         #lats_all  = [l for item in streets['lat'] for l in item]
         #longs_all = [l for item in streets['long'] for l in item]
@@ -105,7 +104,6 @@ class RoadNetwork:
         streets['Long']= streets['points'].map(lambda x: [float(i) for i in x[0::2]])
         streets['Lat'] = streets['points'].map(lambda x: [float(i) for i in x[1::2]])
         self.streets=streets
-        
 
 class MMUtils:
     
