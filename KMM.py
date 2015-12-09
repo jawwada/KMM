@@ -65,7 +65,8 @@ for index, i in cl.iterrows():
     plt.plot(i['Long'],i['Lat'])
 
 plt.plot(xx,yy,'ro')
-plt.plot(gps.ix[1:gps_points,"Longitude"],gps.ix[1:gps_points,"Latitude"],'b.')
+plt.plot(gps.ix[1:gps_points,"Longitude"]+np.random.normal(0,0.0001,gps_points)
+,gps.ix[1:gps_points,"Latitude"]+np.random.normal(0,0.00008,gps_points),'b.')
 plt.show()
 
 '''
