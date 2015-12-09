@@ -19,6 +19,7 @@ class GPSPoints:
         self.read_gps_file(in_file)
         self.transform_and_append()
         
+        
     def read_gps_file(self,in_file):
 
         try:
@@ -40,12 +41,14 @@ class GPSPoints:
 class RoadNetwork:    
         
     streets = pd.DataFrame
+    network_dict = dict
    
     def __init__(self,in_file="/sandbox/KMM/road_network.txt"):
         
         self.read_streets_file(in_file)
         self.parse_streets()
         self.transform_and_append()
+        self.make_network_dict()
     
     def read_streets_file(self, in_file):
         
@@ -54,7 +57,13 @@ class RoadNetwork:
         except: 
             print "I/O Error"
         
+    def make_network_dict(self):
+        
+        self.network_dict=dict(zip(self.streets["Edge ID"].values, \
+                    [LineString(x) for x in self.streets['transform']]))
+                    
     def transform_and_append(self):
+        
         proj = pyproj.Proj("+proj=utm +zone=10T, +north +ellps=WGS84 +datum=WGS84 +units=m")
         streets=self.streets
         streets['transform'] = streets['LINESTRING'].map(lambda x: [proj(j,k) for j,k in x])
@@ -91,7 +100,6 @@ class RoadNetwork:
         
         streets['Long']= streets['points'].map(lambda x: [float(i) for i in x[0::2]])
         streets['Lat'] = streets['points'].map(lambda x: [float(i) for i in x[1::2]])
-        
         self.streets=streets
         
 

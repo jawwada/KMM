@@ -16,10 +16,11 @@ import pandas as pd
 import street_network as sn
 from   shapely.geometry import LineString , Point
 import geopandas as gp
+import itertools
 
 #reading the files and parsing the linestring
 
-network   = sn.RoadNetwork()
+nw   = sn.RoadNetwork()
 gps_p     = sn.GPSPoints()
 
 
@@ -27,10 +28,10 @@ gps_p     = sn.GPSPoints()
 utils = sn.MMUtils(gps_p,network)
 #utils.find_closest_routes(100)
 
-streets = network.streets
+streets = nw.streets
 gps     = gps_p.gps
 
-network=dict(zip(streets["Edge ID"].values,[LineString(x) for x in streets['transform']]))
+
 
 
 '''
