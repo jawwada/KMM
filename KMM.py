@@ -4,6 +4,8 @@
 Created on Mon Dec  7 10:49:25 2015
 @author: ahmed
 """
+from __future__ import division
+
 import os
 os.chdir("/sandbox/KMM")
 
@@ -13,16 +15,14 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import street_network as sn
 from   shapely.geometry import LineString , Point
-import pyproj as proj
-from __future__ import division
-
+import geopandas as gp
 
 #reading the files and parsing the linestring
 
 network   = sn.RoadNetwork()
 gps_p     = sn.GPSPoints()
 
-network.parse_streets()
+
 
 utils = sn.MMUtils(gps_p,network)
 #utils.find_closest_routes(100)
@@ -30,10 +30,12 @@ utils = sn.MMUtils(gps_p,network)
 streets = network.streets
 gps     = gps_p.gps
 
-    
+network=dict(zip(streets["Edge ID"].values,[LineString(x) for x in streets['transform']]))
+
+
 '''
     Tesing Code
-'''
+    
 #columnwise sum
 # get the data types for all columns
 print zip(gps.columns, [type(x) for x in gps.ix[0,:]])
@@ -55,11 +57,16 @@ streets=streets.sort([" Speed (m/s)",'Two Way'])
 #implementing map, flatmap, filter, fold and reduce in python
 
 
+
 #print streets['LINESTRING'][1].replace('\'','')
+g_lat  = gp.GeoSeries(gps.ix[:,'Latitude'])
+g_long = gp.GeoSeries(gps.ix[:,"Longitude"])
+    
+g_lat.plot()
+
 line=LineString(streets['LINESTRING'][1])
 print line
 line.distance(Point(gps.ix[1,2:4]))
-'''
 plt.figure()
 streets['points'].map(lambda x: plt.plot(x[1::2],x[0::2]))
 plt.plot(gps.ix[:,2:4],'+')
@@ -69,8 +76,7 @@ plt.show()
 print gps.ix[:,2:4]
 print streets['LINESTRING'].head()
 
-
 '''
 '''
-    Tesing Code Finished    
-    '''
+Tesing Code Finished    
+'''

@@ -9,7 +9,7 @@ import scipy as sp
 import matplotlib.pyplot as plt
 import pandas as pd
 from shapely.geometry import point,LineString
-
+import pyproj
 
 class GPSPoints:
     
@@ -17,6 +17,7 @@ class GPSPoints:
     
     def __init__(self,in_file="/sandbox/KMM/gps_data.txt"):
         self.read_gps_file(in_file)
+        self.transform_and_append()
         
     def read_gps_file(self,in_file):
 
@@ -29,7 +30,12 @@ class GPSPoints:
         self.gps.pop('Unnamed: 5')
         self.gps = self.gps.rename(columns=lambda x: x.replace(',', 't'))
 
+    def transform_and_append(self):
 
+        proj = pyproj.Proj("+proj=utm +zone=10T, +north +ellps=WGS84 +datum=WGS84 +units=m")
+        xx, yy = proj(self.gps["Longitude"].values, self.gps["Latitude"].values)
+        self.gps['LongProj'] =   xx
+        self.gps['LatProj']  =   yy
 
 class RoadNetwork:    
         
@@ -38,7 +44,8 @@ class RoadNetwork:
     def __init__(self,in_file="/sandbox/KMM/road_network.txt"):
         
         self.read_streets_file(in_file)
-        
+        self.parse_streets()
+        self.transform_and_append()
     
     def read_streets_file(self, in_file):
         
@@ -47,9 +54,12 @@ class RoadNetwork:
         except: 
             print "I/O Error"
         
-        
-        
-    
+    def transform_and_append(self):
+        proj = pyproj.Proj("+proj=utm +zone=10T, +north +ellps=WGS84 +datum=WGS84 +units=m")
+        streets=self.streets
+        streets['transform'] = streets['LINESTRING'].map(lambda x: [proj(j,k) for j,k in x])
+        self.streets=streets
+            
     def parse_streets(self):
     #stripping the linestrings from streets
 
@@ -70,17 +80,17 @@ class RoadNetwork:
         streets['points']       = streets['LINESTRING()']. \
                                         map(lambda x: str(x).split(' '))
                                         
-        streets['long']         = streets['points'].map(lambda x: x[0::2])
-        
-        streets['lat']          = streets['points'].map(lambda x: x[1::2])
         
         
         #one can take all lats and longs by flatmapping a list
         #lats_all  = [l for item in streets['lat'] for l in item]
         #longs_all = [l for item in streets['long'] for l in item]
         streets['LINESTRING'] = streets['points'].\
-                                map(lambda x: zip([float(i) for i in x[1::2]],\
-                                [float(i) for i in x[0::2]]))
+                                map(lambda x: zip([float(i) for i in x[0::2]],\
+                                [float(i) for i in x[1::2]]))
+        
+        streets['Long']= streets['points'].map(lambda x: [float(i) for i in x[0::2]])
+        streets['Lat'] = streets['points'].map(lambda x: [float(i) for i in x[1::2]])
         
         self.streets=streets
         
