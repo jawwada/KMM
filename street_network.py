@@ -8,17 +8,20 @@ import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 import pandas as pd
-from shapely.geometry import point,LineString
+from shapely.geometry import Point,LineString
 import pyproj
 
 class GPSPoints:
     
     gps = pd.DataFrame
+    points_list = list
     
     def __init__(self,in_file="/sandbox/KMM/gps_data.txt"):
         self.read_gps_file(in_file)
         self.transform_and_append()
         
+        self.points_list = [Point(x) for x in zip(self.gps["LongProj"].values,\
+                            self.gps["LatProj"].values)]
         
     def read_gps_file(self,in_file):
 
@@ -37,6 +40,7 @@ class GPSPoints:
         xx, yy = proj(self.gps["Longitude"].values, self.gps["Latitude"].values)
         self.gps['LongProj'] =   xx
         self.gps['LatProj']  =   yy
+        
 
 class RoadNetwork:    
         
@@ -111,6 +115,7 @@ class MMUtils:
     def __init__(self,gps,road_network):
         self.gp = gps
         self.road_network = road_network
+
 '''    
     i=0
     def find_closest_routes(self,dist_threshold):

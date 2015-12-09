@@ -25,13 +25,22 @@ gps_p     = sn.GPSPoints()
 
 
 
-utils = sn.MMUtils(gps_p,network)
+utils = sn.MMUtils(gps_p,nw)
 #utils.find_closest_routes(100)
 
 streets = nw.streets
 gps     = gps_p.gps
 
 
+closest=[k for k in nw.network_dict for y in gps_p.points_list \
+            if y.distance(nw.network_dict[k]) < 1000]
+
+cl=streets[streets["Edge ID"].isin(closest)]
+plt.figure()
+
+for index, i in cl.iterrows():
+    plt.plot(i['Long'],i['Lat'])
+plt.show()
 
 
 '''
@@ -63,19 +72,6 @@ streets=streets.sort([" Speed (m/s)",'Two Way'])
 g_lat  = gp.GeoSeries(gps.ix[:,'Latitude'])
 g_long = gp.GeoSeries(gps.ix[:,"Longitude"])
     
-g_lat.plot()
-
-line=LineString(streets['LINESTRING'][1])
-print line
-line.distance(Point(gps.ix[1,2:4]))
-plt.figure()
-streets['points'].map(lambda x: plt.plot(x[1::2],x[0::2]))
-plt.plot(gps.ix[:,2:4],'+')
-plt.show()
-#make a dict out of a dataframe
-#streets_dict = dict(zip(streets['Edge ID'] ,streets['points'] ))
-print gps.ix[:,2:4]
-print streets['LINESTRING'].head()
 
 '''
 '''
