@@ -5,7 +5,6 @@ Created on Mon Dec  7 10:49:25 2015
 @author: ahmed
 """
 from __future__ import division
-
 import os
 os.chdir("/sandbox/KMM")
 
@@ -19,6 +18,8 @@ import street_network as sn
 #import itertools
 import shapelytools as st
 import pyproj
+
+
 #reading the files and parsing the linestring
 gps_points=100
 dist_thresh=100
