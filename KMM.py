@@ -10,13 +10,13 @@ import os
 os.chdir("/sandbox/KMM")
 
 import numpy as np
-import scipy as sp
+#import scipy as sp
 import matplotlib.pyplot as plt
-import pandas as pd
+#import pandas as pd
 import street_network as sn
-from   shapely.geometry import LineString , Point
-import geopandas as gp
-import itertools
+#from   shapely.geometry import LineString , Point
+#import geopandas as gp
+#import itertools
 import shapelytools as st
 import pyproj
 #reading the files and parsing the linestring
@@ -66,7 +66,7 @@ for index, i in cl.iterrows():
 
 plt.plot(xx,yy,'ro')
 plt.plot(gps.ix[1:gps_points,"Longitude"]+np.random.normal(0,0.0001,gps_points)
-,gps.ix[1:gps_points,"Latitude"]+np.random.normal(0,0.00008,gps_points),'b.')
+,gps.ix[1:gps_points,"Latitude"]+np.random.normal(0,0.0001,gps_points),'b.')
 plt.show()
 
 '''
@@ -87,11 +87,6 @@ list(streets)
 streets.boxplot(column=" Speed (m/s)", by="Two Way")
 streets=streets.sort([" Speed (m/s)",'Two Way'])
 #time series
-
-#list comprehesnions
-
-#implementing map, flatmap, filter, fold and reduce in python
-
 
 
 #print streets['LINESTRING'][1].replace('\'','')
