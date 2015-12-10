@@ -3,6 +3,11 @@
 """
 Created on Mon Dec  7 10:49:25 2015
 @author: ahmed
+
+Purpose: this is the main script that manages the execution of different steps 
+of map matching code.
+
+
 """
 from __future__ import division
 import os
